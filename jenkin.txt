@@ -1,0 +1,28 @@
+node {
+   stage('Get Source') {
+      // copy source code from local file system and test
+      // for a Dockerfile to build the Docker image
+      deleteDir()
+      sh "cp -rf /home/roundglass/Documents/flask-docker-app flask-app"
+      if (!fileExists("flask-app/Dockerfile")) {
+         error('Dockerfile missing.')
+      }
+   }
+   stage('Unit Test') {
+      // run the unit tests
+      dir("flask-app") {
+         sh "virtualenv  venv "
+         sh ". venv/bin/activate"
+         sh "pip install -r requirements.txt"
+         sh "python -m pytest tests/test_app.py"
+      }
+   }
+   stage('Build Docker') {
+       // build the docker image from the source code using the BUILD_ID parameter in image name
+       dir("flask-app") {
+         sh "ls -la ${pwd()}"
+         sh "sudo docker build -t flaskapp:latest ."
+       }
+   }
+}
+
