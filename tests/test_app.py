@@ -1,14 +1,22 @@
-
 import pytest
-from app import *
+from src.index import *
+
 
 @pytest.fixture
 def client():
-   client = app.test_client()
-   return client
+    client = app.test_client()
+    return client
+
 
 def test_root(client):
-   """Test the default route."""
+    """Test the default route."""
 
-   res = client.get('/')
-   assert b'Hello world!' in res.data
+    res = client.get('/')
+    assert b'Hello world!' in res.data
+
+
+def test_status(client):
+    """Test the status route."""
+
+    res = client.get('/status')
+    assert b'{"status":"UP"}' in res.data
