@@ -1,21 +1,15 @@
 import os
-import socket
 
-from flask import Flask, jsonify
+from flask import Flask
 
 app = Flask(__name__)
-
-
-@app.route("/status", methods=["GET"])
-def hello():
-    return jsonify({"status": "UP"})
 
 
 @app.route('/')
 def hello2():
     html = "<h3>Hello {name}!</h3>" \
            "<b>Hostname:</b> {hostname}<br/>"
-    return html.format(name=os.getenv("NAME", "world"), hostname=socket.gethostname())
+    return html
 
 
 if __name__ == "__main__":
